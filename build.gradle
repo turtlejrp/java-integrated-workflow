@@ -32,18 +32,13 @@ static def isLinuxOrMacOs() {
 	return osName.contains('linux') || osName.contains('mac os') || osName.contains('macos')
 }
 
-task installGitHooks(type: Exec) {
-	description 'Installs the pre-commit.sh git hooks from /git-hooks.'
-	group 'git hooks'
-	workingDir rootDir
-	commandLine 'chmod'
-	args '-R', '+x', '.git/hooks/'
-	dependsOn copyGitHooks
-	onlyIf { isLinuxOrMacOs() }
-	doLast {
-		logger.info('Git hook installed successfully.')
-	}
+task installGitHooks(type: Copy){
+	from new File(rootProject.rootDir, 'git-hooks/pre-commit')
+	into { new File(rootProject.rootDir, '.git/hooks/pre-commit')}
+	fileMode 0775
 }
+
+build.dependsOn installGitHooks
 
 dependencies {
 	testImplementation platform('org.junit:junit-bom:5.9.1')
