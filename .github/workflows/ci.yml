@@ -15,5 +15,7 @@ jobs:
           with:
             java-version: '17'
             distribution: 'zulu'
+      -   name: Make gradlew executable
+          run: chmod +x ./gradlew
       -   name: Run Unit Tests
           run: ./gradlew test
